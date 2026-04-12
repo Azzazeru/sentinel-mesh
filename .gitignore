@@ -1,0 +1,64 @@
+# ====================================================================
+# SENTINEL-MESH: Master Gitignore
+# ====================================================================
+
+# --- [ SISTEMA OPERATIVO ] ---
+.DS_Store
+Thumbs.db
+*.swp
+desktop.ini
+
+# --- [ IDEs / EDITORES ] ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sln.iml
+*.user
+*.suo
+*.userosscache
+
+# --- [ .NET / C# ] ---
+# Resultados de compilación
+[Bb]in/
+[Oo]bj/
+[Rr]elease/
+[Dd]ebug/
+
+# Archivos temporales de MSBuild
+*.cache
+*.lock.json
+*.fragment.lock.json
+.vs/
+_ReSharper*/
+
+# --- [ JAVA / QUARKUS ] ---
+target/
+.quarkus/
+*.class
+*.log
+.factorypath
+# Mantenemos los scripts del wrapper pero no el jar pesado
+.mvn/wrapper/maven-wrapper.jar
+
+# --- [ INFRAESTRUCTURA: TERRAFORM ] ---
+# Plugins y estados (MUY IMPORTANTE)
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
+
+# --- [ INFRAESTRUCTURA: ANSIBLE ] ---
+*.retry
+*.log
+# Si usas vaults o contraseñas locales, asegúrate de no subirlas
+.ansible_vault
+
+# --- [ DOCKER & CONTAINERS ] ---
+.dockerignore
+# Ignorar datos locales de bases de datos si montas volúmenes
+deployments/data/
