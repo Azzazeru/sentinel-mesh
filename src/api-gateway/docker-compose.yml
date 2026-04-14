@@ -1,0 +1,47 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine
+    container_name: sentinel-rabbitmq
+    ports:
+      - "5672:5672"    # AMQP protocol
+      - "15672:15672"  # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: sentinel
+      RABBITMQ_DEFAULT_PASS: sentinel
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    networks:
+      - sentinel-net
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    container_name: sentinel-api-gateway
+    ports: 
+      - "8080:8080"
+    environment:
+      QUARKUS_PROFILE: dev
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - sentinel-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  sentinel-net:
+    driver: bridge
+
+volumes:
+  rabbitmq-data:
+    driver: local
